@@ -22,11 +22,15 @@ namespace Grocery.Core.Services
             return groceryListItems;
         }
 
+        
         public List<GroceryListItem> GetAllOnGroceryListId(int groceryListId)
         {
             List<GroceryListItem> groceryListItems = _groceriesRepository.GetAll().Where(g => g.GroceryListId == groceryListId).ToList();
             FillService(groceryListItems);
+            Console.WriteLine("ur mom");
             return groceryListItems;
+
+            
         }
 
         public GroceryListItem Add(GroceryListItem item)
@@ -52,12 +56,19 @@ namespace Grocery.Core.Services
         public List<BestSellingProducts> GetBestSellingProducts(int topX = 5)
         {
             List<GroceryListItem> groceryListItems = _groceriesRepository.GetAll();
-            List<Product> products = _productRepository.GetAll();
-
-
-            BestSellingProducts bestSeller = new BestSellingProducts(123, "Apples", 50, 10, 1);
             List<BestSellingProducts> result = new List<BestSellingProducts>();
-            result.Add(bestSeller);
+
+            var groupedItems = groceryListItems.GroupBy(item => item.ProductId);
+            
+            foreach (var group in groupedItems)
+            {
+                int productId = group.Key;
+                int amountSold = group.Sum(item => item.Amount);
+
+                Product? product = _productRepository.Get(productId);
+                BestSellingProducts bestSeller = new BestSellingProducts(productId, product.Name, product.Stock, amountSold, 1);
+                result.Add(bestSeller);
+            }
             return result;
         }
 
