@@ -27,10 +27,7 @@ namespace Grocery.Core.Services
         {
             List<GroceryListItem> groceryListItems = _groceriesRepository.GetAll().Where(g => g.GroceryListId == groceryListId).ToList();
             FillService(groceryListItems);
-            Console.WriteLine("ur mom");
             return groceryListItems;
-
-            
         }
 
         public GroceryListItem Add(GroceryListItem item)
@@ -43,7 +40,7 @@ namespace Grocery.Core.Services
             throw new NotImplementedException();
         }
 
-        public GroceryListItem? Get(int id)
+        public GroceryListItem? Get(int id) 
         {
             return _groceriesRepository.Get(id);
         }
@@ -58,13 +55,13 @@ namespace Grocery.Core.Services
             List<GroceryListItem> groceryListItems = _groceriesRepository.GetAll();
             List<BestSellingProducts> result = new List<BestSellingProducts>();
 
-            var groupedItems = groceryListItems.GroupBy(item => item.ProductId);
-            
+            var groupedItems = groceryListItems.GroupBy(item => item.ProductId).OrderByDescending(group => group.Sum(item => item.Amount)).Take(topX);
+
             foreach (var group in groupedItems)
             {
                 int productId = group.Key;
                 int amountSold = group.Sum(item => item.Amount);
-
+                
                 Product? product = _productRepository.Get(productId);
                 BestSellingProducts bestSeller = new BestSellingProducts(productId, product.Name, product.Stock, amountSold, 1);
                 result.Add(bestSeller);
