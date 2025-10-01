@@ -56,14 +56,18 @@ namespace Grocery.Core.Services
             List<BestSellingProducts> result = new List<BestSellingProducts>();
 
             var groupedItems = groceryListItems.GroupBy(item => item.ProductId).OrderByDescending(group => group.Sum(item => item.Amount)).Take(topX);
+            int ranking = 0;
+
 
             foreach (var group in groupedItems)
             {
+                ranking++;
+
                 int productId = group.Key;
                 int amountSold = group.Sum(item => item.Amount);
                 
                 Product? product = _productRepository.Get(productId);
-                BestSellingProducts bestSeller = new BestSellingProducts(productId, product.Name, product.Stock, amountSold, 1);
+                BestSellingProducts bestSeller = new BestSellingProducts(productId, product.Name, product.Stock, amountSold, ranking);
                 result.Add(bestSeller);
             }
             return result;
