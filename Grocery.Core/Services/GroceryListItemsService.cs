@@ -50,15 +50,17 @@ namespace Grocery.Core.Services
             return _groceriesRepository.Update(item);
         }
 
+        //Make a ranking of bestselling products based on the amount sold
         public List<BestSellingProducts> GetBestSellingProducts(int topX = 5)
         {
+            //Retrieve list of all grocery list items
             List<GroceryListItem> groceryListItems = _groceriesRepository.GetAll();
             List<BestSellingProducts> result = new List<BestSellingProducts>();
 
             var groupedItems = groceryListItems.GroupBy(item => item.ProductId).OrderByDescending(group => group.Sum(item => item.Amount)).Take(topX);
             int ranking = 0;
 
-
+            //Add bestselling products to the result list
             foreach (var group in groupedItems)
             {
                 ranking++;
