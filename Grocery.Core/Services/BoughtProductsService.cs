@@ -20,7 +20,28 @@ namespace Grocery.Core.Services
         }
         public List<BoughtProducts> Get(int? productId)
         {
-            throw new NotImplementedException();
+            List<GroceryListItem> groceryListItems = _groceryListItemsRepository.GetAll();
+            List<BoughtProducts> boughtProducts = new();
+
+            //Clients die product met productid hebben gekocht met client, boodschappenlijst en product in de lijst staan die wordt geretourneerd.
+            foreach (var item in groceryListItems)
+            {
+                if (item.ProductId == productId)
+                {
+                    var groceryList = _groceryListRepository.Get(item.GroceryListId);
+                    if (groceryList != null)
+                    {
+                        var client = _clientRepository.Get(groceryList.ClientId);
+                        var product = _productRepository.Get(item.ProductId);
+                        if (client != null && product != null)
+                        {
+                            boughtProducts.Add(new BoughtProducts(client, groceryList, product));
+                        }
+                    }
+                }
+            }
+
+            return boughtProducts;
         }
     }
 }

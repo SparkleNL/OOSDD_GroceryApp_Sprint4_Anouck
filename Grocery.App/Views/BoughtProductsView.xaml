@@ -35,8 +35,8 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <Label Text="{Binding Client}"/>
-                            <Label Text="{Binding GroceryList}"/>
+                            <Label Text="{Binding Client.Name}" HorizontalOptions="End"/>
+                            <Label Text="{Binding GroceryList.Name}"/>
                         </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
