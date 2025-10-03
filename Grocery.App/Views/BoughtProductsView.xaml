@@ -5,7 +5,7 @@
              xmlns:m="clr-namespace:Grocery.Core.Models;assembly=Grocery.Core"
              x:Class="Grocery.App.Views.BoughtProductsView"
              x:DataType="vm:BoughtProductsViewModel"
-             Title="BoughtProductsView">
+             Title="Verkochte producten">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="4*"/>

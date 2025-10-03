@@ -40,7 +40,6 @@ namespace Grocery.Core.Services
                     }
                 }
             }
-
             return boughtProducts;
         }
     }
