@@ -22,6 +22,7 @@ namespace Grocery.Core.Services
             return groceryListItems;
         }
 
+        
         public List<GroceryListItem> GetAllOnGroceryListId(int groceryListId)
         {
             List<GroceryListItem> groceryListItems = _groceriesRepository.GetAll().Where(g => g.GroceryListId == groceryListId).ToList();
@@ -39,7 +40,7 @@ namespace Grocery.Core.Services
             throw new NotImplementedException();
         }
 
-        public GroceryListItem? Get(int id)
+        public GroceryListItem? Get(int id) 
         {
             return _groceriesRepository.Get(id);
         }
@@ -49,9 +50,29 @@ namespace Grocery.Core.Services
             return _groceriesRepository.Update(item);
         }
 
+        //Make a ranking of bestselling products based on the amount sold
         public List<BestSellingProducts> GetBestSellingProducts(int topX = 5)
         {
-            throw new NotImplementedException();
+            //Retrieve list of all grocery list items
+            List<GroceryListItem> groceryListItems = _groceriesRepository.GetAll();
+            List<BestSellingProducts> result = new List<BestSellingProducts>();
+
+            var groupedItems = groceryListItems.GroupBy(item => item.ProductId).OrderByDescending(group => group.Sum(item => item.Amount)).Take(topX);
+            int ranking = 0;
+
+            //Add bestselling products to the result list
+            foreach (var group in groupedItems)
+            {
+                ranking++;
+
+                int productId = group.Key;
+                int amountSold = group.Sum(item => item.Amount);
+                
+                Product? product = _productRepository.Get(productId);
+                BestSellingProducts bestSeller = new BestSellingProducts(productId, product.Name, product.Stock, amountSold, ranking);
+                result.Add(bestSeller);
+            }
+            return result;
         }
 
         private void FillService(List<GroceryListItem> groceryListItems)
