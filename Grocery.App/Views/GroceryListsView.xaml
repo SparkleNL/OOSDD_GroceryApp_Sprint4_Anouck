@@ -8,7 +8,7 @@
              Title="GroceryListsView">
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Test" Command="{Binding ShowBoughtProductsCommand}"  IconImageSource="{FontImage Glyph='&#xf30c;', Color=Black, Size=22}" />
+        <ToolbarItem Text="{Binding Client.Name}" Command="{Binding ShowBoughtProductsCommand}"/>
     </ContentPage.ToolbarItems>
 
     <Shell.TitleView>

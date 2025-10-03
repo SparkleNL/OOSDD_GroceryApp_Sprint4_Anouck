@@ -13,6 +13,8 @@ namespace Grocery.App.ViewModels
         private readonly IGroceryListService _groceryListService;
         private readonly GlobalViewModel _global;
 
+        //Retrieve the current logged in client
+        public Client? Client => _global.Client;
         public GroceryListViewModel(IGroceryListService groceryListService, GlobalViewModel global) 
         {
             Title = "Boodschappenlijst";
